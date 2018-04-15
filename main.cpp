@@ -3,31 +3,22 @@
 #include "my_allocator.h"
 #include <map>
 #include <list>
+#include "my_forward_list.h"
 
 template<typename T>
 struct Deleter {
     void operator() (T* p) {delete[] p;std::cout<< "deleter call" <<std::endl;}
 };
 int main() {
-    {
-        auto v = std::list<int, my::allocator<int,30>>{};
-//    v.reserve(64);
-//    for(int i = 0; i < 100; ++i) {
-        v.emplace_back(2);
-        v.emplace_back(3);
-        v.emplace_back(4);
-        v.emplace_back(5);
-        v.emplace_back(2);
-        v.emplace_back(3);
-        v.emplace_back(4);
-        v.emplace_back(5);
-        v.emplace_back(2);
-        v.emplace_back(3);
-        v.emplace_back(4);
-        v.emplace_back(5);
-        for(auto item : v) {
-            std::cout << item;
-        }
+//    {
+//        auto v = std::list<int, my::allocator<int,4>>{};
+////    v.reserve(64);
+//    for(int i = 0; i < 12000; ++i) {
+//        v.emplace_back(2);
+//    }
+//        for(auto item : v) {
+//            std::cout << item;
+//        }
 //    }
 
 //        std::unique_ptr<int> up(new int[10]);
@@ -35,7 +26,8 @@ int main() {
 //        std::cout << *(up.get() + 3) << std::endl;
 //        up.release();
         //std::cout << *(up.get() + 3) << std::endl;
-    }
+//        v.emplace_back(5);
+//    }
 
 //std::cout << "v2" << std::endl;
 //    auto v2 = std::list<int, my::allocator<int>>{};
@@ -57,6 +49,17 @@ int main() {
 //    for(auto item : v)  {
 //        std::cout << item;
 //    }
+
+
+
+    my::forward_list<int,my::allocator<int,20>> a;
+    a.append(1);
+    a.append(1);
+    a.append(1);
+    a.append(1);
+    for(auto i : a) {
+        std::cout << i;
+    }
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }

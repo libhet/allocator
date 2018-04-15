@@ -4,6 +4,11 @@
 #include <list>
 namespace my{
 
+    /**
+     *
+     * @tparam T
+     * @tparam Capacity
+     */
     template<typename T, size_t Capacity = 64>
     class allocator {
     private:
@@ -32,7 +37,7 @@ namespace my{
             if(n != 1)
                 throw std::invalid_argument( "Invalid  number of elements for allocate()" );
 
-            std::cout << __PRETTY_FUNCTION__ << std::endl;
+//            std::cout << __PRETTY_FUNCTION__ << std::endl;
 
             bool    need_blocks = (size%Capacity == 0);
             T*      p = nullptr;
