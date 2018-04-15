@@ -16,22 +16,9 @@ namespace my {
     protected:
         using allocator_type = typename Allocator::template rebind<Node>::other;
     public:
-        forward_list() = default;
+        forward_list()  = default;
         ~forward_list() = default;
 
-        /**
-         * добавить новый элемент
-         * Вызывает allocate который возвращает нвоый указатель
-         * Следом вызывает construct
-         *
-         * обойти контейнер в одном направлении
-         */
-
-        /**
-         * emplace_back стандартного листа вызывает M_insert(end(), std::forward(...))
-         * insert вставляет перед указанным элементом
-         *
-         */
         class iterator
                 : std::iterator<std::forward_iterator_tag, T>
         {
@@ -73,7 +60,7 @@ namespace my {
         iterator end() {
             return iterator(nullptr);
         }
-        void append(const T& t) {
+        void     append(const T& t) {
             Node* node = allocator.allocate(1);
             allocator.construct(node,t);
             node->m_next = m_head;
