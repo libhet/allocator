@@ -10,17 +10,33 @@ struct Deleter {
 };
 int main() {
     {
-//        auto v = std::list<int, my::allocator<int,500>>{};
-////    v.reserve(64);
+        auto v = std::list<int, my::allocator<int,30>>{};
+//    v.reserve(64);
 //    for(int i = 0; i < 100; ++i) {
-//        v.emplace_back(2);
-//        v.emplace_back(3);
-//        v.emplace_back(4);
+        v.emplace_back(2);
+        v.emplace_back(3);
+        v.emplace_back(4);
+        v.emplace_back(5);
+        v.emplace_back(2);
+        v.emplace_back(3);
+        v.emplace_back(4);
+        v.emplace_back(5);
+        v.emplace_back(2);
+        v.emplace_back(3);
+        v.emplace_back(4);
+        v.emplace_back(5);
+        for(auto item : v) {
+            std::cout << item;
+        }
 //    }
 
-        std::unique_ptr<int> up(new int[10],Deleter<int>);
-        up.release();
+//        std::unique_ptr<int> up(new int[10]);
+//        *(up.get() + 3) = 6;
+//        std::cout << *(up.get() + 3) << std::endl;
+//        up.release();
+        //std::cout << *(up.get() + 3) << std::endl;
     }
+
 //std::cout << "v2" << std::endl;
 //    auto v2 = std::list<int, my::allocator<int>>{};
 ////    v.reserve(64);
