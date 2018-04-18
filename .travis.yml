@@ -7,7 +7,7 @@ script:
 - cmake .
 - cmake --build .
 - cmake --build . --target package
-- sudo dpkg -i allocator-*.deb && pwd && ls -l && ltrace -C ./allocator.out
+- sudo dpkg -i allocator-*.deb && pwd && ls -l && ltrace -C ./allocator
 deploy:
   provider: script
   skip_cleanup: true
