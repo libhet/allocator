@@ -2,7 +2,7 @@
 #define ALLOCATOR_FACTORIAL_H
 
 
-constexpr auto factorial(auto n) -> decltype(n)
+constexpr size_t factorial(size_t n)
 {
     return n ? n*factorial(n-1):1;
 }
