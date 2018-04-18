@@ -3,7 +3,7 @@
 #include <iterator>
 #include <memory>
 namespace my {
-    template <typename T, typename Allocator>
+    template <typename T, typename Allocator = std::allocator<T>>
     class forward_list{
     private:
         struct Node {
@@ -63,8 +63,19 @@ namespace my {
         void     append(const T& t) {
             Node* node = allocator.allocate(1);
             allocator.construct(node,t);
-            node->m_next = m_head;
-            m_head = node;
+//            node->m_next = m_head;
+//            m_head = node;
+            node->m_next = nullptr;
+            if(m_head == nullptr) {
+                m_head = node;
+            }
+            else {
+                Node* current_node = m_head;
+                while(current_node->m_next != nullptr) {
+                    current_node = current_node->m_next;
+                }
+                current_node->m_next = node;
+            }
         }
 
     private:
