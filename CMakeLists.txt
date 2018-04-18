@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.2)
 project(allocator)
 
 IF($ENV{TRAVIS_BUILD_NUMBER})
