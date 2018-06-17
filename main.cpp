@@ -139,8 +139,8 @@ int main(int argc, const char** argv) {
 
 //        create_and_fill_map();
 //        map_with_new_allocator();
-//        create_and_fill_my_container();
-        my_container_with_my_allocator();
+        create_and_fill_my_container();
+//        my_container_with_my_allocator();
 
     }
     catch(const std::exception &e)
