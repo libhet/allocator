@@ -21,14 +21,14 @@ static int debug = 0;
 template <typename T>
 void map_debug_output(const T& container) {
     for(auto &container_member : container) {
-//        std::cout << container_member.first << " " << container_member.second << std::endl;
+        std::cout << container_member.first << " " << container_member.second << std::endl;
     }
 }
 
 template <typename T>
 void debug_output(const T& container) {
     for(auto &container_member : container) {
-//        std::cout << container_member << std::endl;
+        std::cout << container_member << std::endl;
     }
 }
 
@@ -137,10 +137,10 @@ int main(int argc, const char** argv) {
 
     try {
 
-//        create_and_fill_map();
-//        map_with_new_allocator();
+        create_and_fill_map();
+        map_with_new_allocator();
         create_and_fill_my_container();
-//        my_container_with_my_allocator();
+        my_container_with_my_allocator();
 
     }
     catch(const std::exception &e)
