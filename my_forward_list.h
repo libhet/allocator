@@ -6,15 +6,32 @@ namespace my {
     template <typename T, typename Allocator = std::allocator<T>>
     class forward_list{
     private:
-        struct Node {
-            Node(): m_next(nullptr) {}
-            explicit Node(const T& t) : m_t(t),m_next(nullptr) {}
+        struct Node;
 
-            T       m_t;
-            Node*   m_next = nullptr;
-        };
     protected:
         using allocator_type = typename Allocator::template rebind<Node>::other;
+
+    private:
+        struct Node {
+
+            struct NodeDeleter {
+                void operator() (void *p) {
+                    static_cast<T*>(p)->~T();
+//                    p->allocator->deallocate(p, 1);
+                }
+            };
+
+            using Ptr = std::unique_ptr<Node, NodeDeleter>;
+
+            Node(): m_next(nullptr) {}
+            explicit Node(const T& value) : m_value(value),m_next(nullptr) {}
+            ~Node() = default;
+
+//            allocator_type* allocator;
+            T       m_value;
+            Ptr     m_next;
+        };
+
     public:
         forward_list()  = default;
         ~forward_list() = default;
@@ -23,63 +40,66 @@ namespace my {
                 : std::iterator<std::forward_iterator_tag, T>
         {
         private:
-            Node* m_node = nullptr;
+            Node *m_node = nullptr;
         public:
             iterator(Node* node): m_node(node) {}
             void operator++() {
                 if(m_node) {
-                    m_node = m_node->m_next;
+                    m_node = m_node->m_next.get();
                 }
             }
             T & operator*() {
                 if(m_node) {
-                    return m_node->m_t;
+                    return m_node->m_value;
                 }
             }
             const T & operator*() const {
                 if(m_node) {
-                    return m_node->m_t;
+                    return m_node->m_value;
                 }
             }
             T * operator->() {
                 if(m_node) {
-                    return &(m_node->m_t);
+                    return &(m_node->m_value);
                 }
             }
-            bool operator!=(const iterator& other) {
+            bool operator!=(const iterator& other) const {
                 return m_node != other.m_node;
             }
-            bool operator+=(const iterator& other) {
+            bool operator+=(const iterator& other) const {
                 return !operator!=(other);
             }
         };
 
-        iterator begin(){
-            return iterator(m_head);
+        iterator begin() const {
+            return iterator(m_head.get());
         }
-        iterator end() {
+        iterator end() const {
             return iterator(nullptr);
         }
-        void     append(const T& t) {
+        void     append(const T& value) {
             Node* node = allocator.allocate(1);
-            allocator.construct(node,t);
+            allocator.construct(node,value);
 //            node->m_next = m_head;
 //            m_head = node;
             node->m_next = nullptr;
-            if(m_head == nullptr) {
-                m_head = node;
+
+            typename Node::Ptr node_ptr(node);
+
+            if(m_head.get() == nullptr) {
+                m_head = std::move(node_ptr);
             }
             else {
-                Node* current_node = m_head;
-                while(current_node->m_next != nullptr) {
-                    current_node = current_node->m_next;
+                Node* current_node = m_head.get();
+                while(current_node->m_next.get() != nullptr) {
+                    current_node = current_node->m_next.get();
                 }
-                current_node->m_next = node;
+                current_node->m_next = std::move(node_ptr);
             }
         }
 
     private:
-        Node* m_head = nullptr;
+        typename Node::Ptr m_head = nullptr;
         allocator_type allocator;
     };
 }

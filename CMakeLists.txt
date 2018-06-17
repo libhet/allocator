@@ -9,7 +9,7 @@ ENDIF()
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(allocator main.cpp my_allocator.h my_forward_list.h factorial.h)
+add_executable(allocator main.cpp my_allocator.h my_forward_list.h factorial.h my_debuger.h test/test.cpp newdelete.h newdelete.cpp)
 
 set_target_properties(allocator PROPERTIES
         CXX_STANDARD 14
