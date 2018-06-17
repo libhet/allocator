@@ -67,8 +67,8 @@ namespace my{
         }
         template<typename... Args>
         void construct(T* p, Args... args) {
-          std::cout << __PRETTY_FUNCTION__ << std::endl;
-            std::cout << p << std::endl;
+//          std::cout << __PRETTY_FUNCTION__ << std::endl;
+//            std::cout << p << std::endl;
             new(p) T(std::forward<Args>(args)...);
         }
         void destroy(T* p) {

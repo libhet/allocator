@@ -47,11 +47,11 @@ namespace my {
             do {
                 Node* last_node = current_node;
                 current_node = current_node->m_next.get();
-                std::cout << "Destroy Node: " << last_node->m_value << std::endl;
+//                std::cout << "Destroy Node: " << last_node->m_value << std::endl;
                 allocator.destroy(last_node);
             }
             while(current_node->m_next.get() != nullptr);
-            std::cout << "Destroy Node: " << current_node->m_value << std::endl;
+//            std::cout << "Destroy Node: " << current_node->m_value << std::endl;
             allocator.destroy(current_node);
         }
 

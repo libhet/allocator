@@ -21,14 +21,14 @@ static int debug = 0;
 template <typename T>
 void map_debug_output(const T& container) {
     for(auto &container_member : container) {
-        std::cout << container_member.first << " " << container_member.second << std::endl;
+//        std::cout << container_member.first << " " << container_member.second << std::endl;
     }
 }
 
 template <typename T>
 void debug_output(const T& container) {
     for(auto &container_member : container) {
-        std::cout << container_member << std::endl;
+//        std::cout << container_member << std::endl;
     }
 }
 
