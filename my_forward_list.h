@@ -15,26 +15,45 @@ namespace my {
         struct Node {
 
             struct NodeDeleter {
-                void operator() (void *p) {
-                    static_cast<T*>(p)->~T();
-//                    p->allocator->deallocate(p, 1);
+                void operator() (Node *p) {
+//                    std::cout << __PRETTY_FUNCTION__ << std::endl;
+//                    std::cout << p << std::endl;
+//                    std::cout << p->m_value << std::endl;
+//                    std::cout << p->m_next.get() << std::endl;
+//                    std::cout << "/////////////////////////////" << std::endl;
+//                    p->~Node();
+//                    p->node_allocator->deallocate(p, 1);
                 }
             };
 
             using Ptr = std::unique_ptr<Node, NodeDeleter>;
 
             Node(): m_next(nullptr) {}
-            explicit Node(const T& value) : m_value(value),m_next(nullptr) {}
+            explicit Node(const T& value, allocator_type* node_allocator)
+                    : m_value(value),
+                      m_next(nullptr),
+                      node_allocator(node_allocator) {}
             ~Node() = default;
 
-//            allocator_type* allocator;
+            allocator_type* node_allocator;
             T       m_value;
             Ptr     m_next;
         };
 
     public:
         forward_list()  = default;
-        ~forward_list() = default;
+        ~forward_list() {
+            Node* current_node = m_head.get();
+            do {
+                Node* last_node = current_node;
+                current_node = current_node->m_next.get();
+                std::cout << "Destroy Node: " << last_node->m_value << std::endl;
+                allocator.destroy(last_node);
+            }
+            while(current_node->m_next.get() != nullptr);
+            std::cout << "Destroy Node: " << current_node->m_value << std::endl;
+            allocator.destroy(current_node);
+        }
 
         class iterator
                 : std::iterator<std::forward_iterator_tag, T>
@@ -79,12 +98,12 @@ namespace my {
         }
         void     append(const T& value) {
             Node* node = allocator.allocate(1);
-            allocator.construct(node,value);
+            allocator.construct(node,value, &allocator);
 //            node->m_next = m_head;
 //            m_head = node;
             node->m_next = nullptr;
 
-            typename Node::Ptr node_ptr(node);
+            typename Node::Ptr node_ptr(std::move(node));
 
             if(m_head.get() == nullptr) {
                 m_head = std::move(node_ptr);

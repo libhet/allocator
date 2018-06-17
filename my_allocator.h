@@ -32,6 +32,7 @@ namespace my{
         };
 
         allocator() = default;
+        ~allocator() {  }
 
         template<typename U>
         allocator(allocator<U,Capacity>& other) {}
@@ -41,30 +42,33 @@ namespace my{
             if(n != 1)
                 throw std::invalid_argument( "Invalid  number of elements for allocate()" );
 
-            std::cout << __PRETTY_FUNCTION__ << std::endl;
+//            std::cout << __PRETTY_FUNCTION__ << std::endl;
 
             bool    need_blocks = (size%Capacity == 0);
             pointer      p = nullptr;
             if(need_blocks) {
                     block.emplace_back(std::array<std::array<unsigned char, sizeof(T)>,Capacity>());
-                    p = reinterpret_cast<pointer>(&block[size/Capacity].at(size%Capacity));
+                auto a = &block[size/Capacity];
+                auto b = &(block[size/Capacity].at(size%Capacity));
+                    p = reinterpret_cast<pointer>(&(block[size/Capacity].at(size%Capacity)));
                     ++size;
             }
             else {
-                p = reinterpret_cast<pointer>(&block[size/Capacity].at(size%Capacity));
+                p = reinterpret_cast<pointer>(&(block[size/Capacity].at(size%Capacity)));
                 ++size;
             }
             return p;
         }
         void deallocate(pointer p, size_t n) {
-        std::cout << __PRETTY_FUNCTION__ << std::endl;
+//        std::cout << __PRETTY_FUNCTION__ << std::endl;
 //            for(auto& up : block) {
 //                if(reinterpret_cast<pointer>(up.data()) == p) {up.reset();}
 //            }
         }
         template<typename... Args>
         void construct(T* p, Args... args) {
-//          std::cout << __PRETTY_FUNCTION__ << std::endl;
+          std::cout << __PRETTY_FUNCTION__ << std::endl;
+            std::cout << p << std::endl;
             new(p) T(std::forward<Args>(args)...);
         }
         void destroy(T* p) {
