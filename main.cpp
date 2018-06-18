@@ -2,15 +2,10 @@
 #include <vector>
 #include "my_allocator.h"
 #include <map>
-#include <list>
 #include "my_forward_list.h"
-//#include <iterator>
 #include <algorithm>
 
-
-#include "my_debuger.h"
-
-static int debug = 0;
+extern int debug;
 
 /**
  *
@@ -19,14 +14,14 @@ static int debug = 0;
  * Выводит содержимое контейнера container
  */
 template <typename T>
-void map_debug_output(const T& container) {
+void print_map(const T& container) {
     for(auto &container_member : container) {
         std::cout << container_member.first << " " << container_member.second << std::endl;
     }
 }
 
 template <typename T>
-void debug_output(const T& container) {
+void print_container(const T &container) {
     for(auto &container_member : container) {
         std::cout << container_member << std::endl;
     }
@@ -68,10 +63,6 @@ void create_and_fill_map() {
             10,
             make_factorial_pair
     );
-
-    if(debug != 0) {
-        map_debug_output(std_map);
-    }
 }
 
 /**
@@ -88,9 +79,7 @@ void map_with_new_allocator() {
             make_factorial_pair
     );
 
-    if(debug != 0) {
-        map_debug_output(std_map_with_my_allocator);
-    }
+    print_map(std_map_with_my_allocator);
 }
 
 /**
@@ -102,10 +91,6 @@ void create_and_fill_my_container() {
 
     for (int i = 0; i < 10; ++i) {
         my_forward_list_with_std_allocator.append(i);
-    }
-
-    if(debug != 0) {
-        debug_output(my_forward_list_with_std_allocator);
     }
 }
 
@@ -121,10 +106,7 @@ void my_container_with_my_allocator() {
     for (int i = 0; i < 10; ++i) {
         my_fl_with_my_allocator.append(i);
     }
-
-    if(debug != 0) {
-        debug_output(my_fl_with_my_allocator);
-    }
+        print_container(my_fl_with_my_allocator);
 }
 
 int main(int argc, const char** argv) {
@@ -136,15 +118,12 @@ int main(int argc, const char** argv) {
     }
 
     try {
-
         create_and_fill_map();
         map_with_new_allocator();
         create_and_fill_my_container();
         my_container_with_my_allocator();
-
     }
-    catch(const std::exception &e)
-    {
+    catch(const std::exception &e) {
         std::cerr << e.what() << std::endl;
     }
 
